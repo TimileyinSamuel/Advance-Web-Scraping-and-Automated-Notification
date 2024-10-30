@@ -1,4 +1,5 @@
 name: Run R Script Daily
+uses: r-lib/actions/setup-r@v1
 
 on:
   schedule:
