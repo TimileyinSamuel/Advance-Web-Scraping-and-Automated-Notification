@@ -1,5 +1,4 @@
 name: Run R Script Daily
-uses: r-lib/actions/setup-r@v1
 
 on:
   schedule:
@@ -16,6 +15,8 @@ jobs:
       # Set up R
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: '4.3.1'  # Specify a stable R version
 
       # Install R packages (replace with your actual packages)
       - name: Install R packages
