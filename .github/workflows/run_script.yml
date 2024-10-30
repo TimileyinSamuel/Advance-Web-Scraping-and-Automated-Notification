@@ -12,9 +12,11 @@ jobs:
       # Checkout the repository to access your script
       - uses: actions/checkout@v2
 
-      # Set up R (using the default version)
+      # Set up R with a stable version (4.2.0)
       - name: Set up R
         uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: '4.2.0'  # Specify a stable R version
 
       # Install R packages
       - name: Install R packages
@@ -28,4 +30,5 @@ jobs:
       # Run the R script
       - name: Run R script
         run: Rscript Alert_test.R
+
 
