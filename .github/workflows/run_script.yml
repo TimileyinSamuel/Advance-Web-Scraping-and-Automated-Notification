@@ -15,9 +15,16 @@ jobs:
       # Checkout the repository to access your script
       - uses: actions/checkout@v2
 
+      # Install system dependencies for 'keyring'
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y libsecret-1-dev
+
       # Install R packages (if needed)
       - name: Install R packages
         run: |
+          set -x
           Rscript -e 'install.packages("rvest")'
           Rscript -e 'install.packages("blastula")'
           Rscript -e 'install.packages("glue")'
@@ -26,4 +33,6 @@ jobs:
 
       # Run the R script
       - name: Run R script
-        run: Rscript Alert_test.R
+        run: |
+          set -x
+          Rscript Alert_test.R
