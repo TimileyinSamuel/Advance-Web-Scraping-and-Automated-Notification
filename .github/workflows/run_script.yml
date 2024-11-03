@@ -8,13 +8,12 @@ on:
 jobs:
   run_r_script:
     runs-on: ubuntu-latest
+    container:
+      image: rocker/r-ver:4.2.0  # Uses R version 4.2.0
+
     steps:
       # Checkout the repository to access your script
       - uses: actions/checkout@v2
-
-      # Set up R (use the default version)
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v1
 
       # Install R packages (if needed)
       - name: Install R packages
