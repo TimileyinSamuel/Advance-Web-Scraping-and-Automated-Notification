@@ -1,0 +1,30 @@
+name: Run R Script Daily
+
+on:
+  schedule:
+    - cron: '0 9,14 * * *'  # Runs at 9 AM and 2 PM UTC daily
+  workflow_dispatch:        # Allows manual triggering
+
+jobs:
+  run_r_script:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to access your script
+      - uses: actions/checkout@v2
+
+      # Set up R (use the default version)
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v1
+
+      # Install R packages (if needed)
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages("rvest")'
+          Rscript -e 'install.packages("blastula")'
+          Rscript -e 'install.packages("glue")'
+          Rscript -e 'install.packages("httr")'
+          Rscript -e 'install.packages("keyring")'
+
+      # Run the R script
+      - name: Run R script
+        run: Rscript Alert_test.R
