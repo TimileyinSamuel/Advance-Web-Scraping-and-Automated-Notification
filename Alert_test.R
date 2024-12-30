@@ -10,7 +10,7 @@ library(keyring)
 ##### My gmail details #####
 create_smtp_creds_key(
   id = "gmail_credential",
-  user = "ajitonitimileyin@gmail.com",
+  user = "senderemailaddress@gmail.com",
   provider = "gmail",
   host = "smtp.gmail.com",
   port = 587,
@@ -18,34 +18,34 @@ create_smtp_creds_key(
   overwrite = TRUE
 )
 
-##### Email notification for new articles on Africa Private Equity News (APE)
+##### Email notification for new articles on Website
 send_article_notification <- function(article_title, article_link) {
   email <- compose_email(
     body = md(glue(
-      "A new deal has been published on the website!\n\n**Title:** {article_title}\n**Link:** {article_link}"
+      "A new article has been published on the website!\n\n**Title:** {article_title}\n**Link:** {article_link}"
     ))
   )
   
 ### Make subject as a single string
 subject_text <- as.character(glue("New Article Published: {article_title}"))
   
-### Send the email notification to classements@africabusinessplus.com
+### Send the email notification to receiveremailaddress@gmail.com
 smtp_send(
     email = email,
-    from = "ajitonitimileyin@gmail.com",
-    to = "classements@africabusinessplus.com",
+    from = "senderemailaddress@gmail.com",
+    to = "receiveremailaddress@gmail.com",
     subject = subject_text,
     credentials = creds_key(id = "gmail_credential"),
     verbose = TRUE
   )
 }
 
-################################### WEBSITE SCRAPPING OF AFRICA PRIVATE EQUITY NEWS #################################
+################################### WEBSITE SCRAPPING ######################################
 ### Loading web scraping library
 library(rvest)
 
-### Defining the URL of Africa Private Equity News
-archive_url <- "https://www.africaprivateequitynews.com/archive?sort=new"
+### Defining the URL of Website
+archive_url <- "https://www.website.com"
 
 ### Path to the file where previously fetched articles will be saved
 prev_articles_file <- "previous_articles.txt"
@@ -56,12 +56,12 @@ check_for_new_articles <- function() {
   page <- read_html(archive_url)
   
 ### Extracting all article titles and links
-  article_titles <- page %>% html_elements('[data-testid="post-preview-title"]') %>% html_text(trim = TRUE)
-  article_links <- page %>% html_elements('[data-testid="post-preview-title"]') %>% html_attr("href")
+  article_titles <- page %>% html_elements('[data-testid="preview-title"]') %>% html_text(trim = TRUE)
+  article_links <- page %>% html_elements('[data-testid="preview-title"]') %>% html_attr("href")
   
 ### Construct full URLs if links are relative
   article_links <- ifelse(grepl("^https?://", article_links), article_links,
-                          paste0("https://www.africaprivateequitynews.com", article_links))
+                          paste0("https://www.website.com", article_links))
   
 ### Load previously saved articles
   if (file.exists(prev_articles_file)) {
@@ -88,13 +88,3 @@ check_for_new_articles <- function() {
 
 ### Run the function to check for new articles
 check_for_new_articles()
-
-################################################ DAILY EMAIL SCHEDULE #############################################
-##### Done on my mac terminal
-#### crontab -e
-
-### Then
-### 0 9,14 * * * Rscript "/Users/timmytesla/Documents/ALL FOLDERS/THIRD SEMESTER MATERIALS/ACTIVITIES/SHINY/Shiny_workbook/Alert_test.R" >> "/Users/timmytesla/Documents/ALL FOLDERS/THIRD SEMESTER MATERIALS/ACTIVITIES/SHINY/Shiny_workbook/cron_output.log" 2>&1
-## install.packages(c("httr", "rvest", "curl"))
-## library(httr)
-######################################################### END ####################################################
